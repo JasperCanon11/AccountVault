@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account Vault</title>
+<style>
+ :root{
+  --bg:#0b0e13;--panel:#11161e;--panel2:#151b24;--line:#27303c;
+  --text:#e7edf5;--muted:#8490a0;--green:#55d6a7;--blue:#72a7ff;
+  --red:#ff6b78;--yellow:#e6c46a;--radius:10px;
+}
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,sans-serif
+}
+
+button,input,select,textarea{
+    font:inherit
+}
+
+button{
+    cursor:pointer
+}
+
+.hidden{
+    display:none!important
+}
+
+.wrap{
+    max-width:1050px;
+    margin:auto;
+    padding:24px
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;align-items:center;
+    margin-bottom:22px
+}
+
+.brand h1{
+    margin:0;
+    font-size:24px
+}
+
+    .brand p{
+        margin:5px 0 0;
+        color:var(--muted);
+        font-size:13px
+    }
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap
+}
+
+button{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:9px 13px;
+    border-radius:7px
+}
+
+button:hover{
+    border-color:var(--blue)
+}
+
+.primary{
+    background:var(--green);
+    border-color:var(--green);
+    color:#07120e;font-weight:700
+}
+
+.danger{
+    color:var(--red)
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;margin-bottom:16px
+}
+
+.stat,.card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius)
+}
+
+.stat{
+    padding:14px
+}
+
+.stat small{
+    display:block;
+    color:var(--muted);
+    font-size:11px
+}
+
+.stat b{
+    font-size:22px
+}
+
+.toolbar{
+    padding:12px;
+    display:flex;
+    gap:8px;
+    margin-bottom:14px
+}
+
+input,select,textarea{
+    width:100%;
+    background:#0c1118;
+    border:1px solid var(--line);
+    color:var(--text);border-radius:7px;
+    padding:10px;outline:none
+}
+
+input:focus,select:focus,textarea:focus{
+    border-color:var(--blue)
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px
+}
+
+.account{
+    padding:15px;
+    position:relative
+}
+
+.account-head{
+    display:flex;
+    align-items:center;
+    gap:10px
+}
+.icon{
+    width:38px;
+    height:38px;
+    border-radius:9px;
+    background:var(--panel2);
+    display:grid;
+    place-items:center;
+    font-size:18px
+}
+
+.account h3{
+    margin:0;
+    font-size:15px
+}
+
+.cat{
+    font-size:11px;
+    color:var(--muted)
+}
+
+.email{
+    margin:13px 0 9px;
+    color:#bcc6d3;
+    font-size:13px;
+    word-break:break-all
+}
+
+.passrow{
+    display:flex;
+    gap:7px
+}
+
+.passrow input{
+    font-family:monospace
+}
+
+.card-actions{
+    display:flex;
+    gap:6px;
+    margin-top:12px
+}
+
+.card-actions button{
+    font-size:12px;
+    padding:7px 9px
+}
+
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:45px;
+    border:1px dashed var(--line);
+    border-radius:var(--radius);
+    grid-column:1/-1
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.78);
+    display:grid;
+    place-items:center;
+    padding:18px;z-index:5
+}
+
+.modal{
+    width:min(500px,100%);
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;padding:20px
+}
+
+.modal h2{
+    margin:0 0 5px
+}
+.modal p{
+    color:var(--muted);
+    font-size:13px;
+    margin:0 0 17px
+}
+
+.form{
+    display:grid;gap:9px
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:15px
+}
+
+#unlock{
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    padding:20px
+}
+
+.unlock-box{
+    width:min(410px,100%);
+    background:var(--panel);
+    border:1px solid var(--line);
+    padding:25px;border-radius:13px
+}
+
+.unlock-box h1{
+    margin-top:0
+}
+
+.unlock-box p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5
+}
+
+.note{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:12px
+}
+
+.toast{
+    position:fixed;
+    right:20px;bottom:20px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    padding:11px 14px;
+    border-radius:8px;
+    z-index:20
+}
+
+@media(max-width:700px){
+    .stats{grid-template-columns:repeat(2,1fr)
+    }
+    .grid{grid-template-columns:1fr}
+    .top{align-items:flex-start;
+        flex-direction:column}
+        .row{grid-template-columns:1fr}
+    }
+    </style>
+    </head>
+    <body>
+        
+        <div id="unlock">
+            <div class="unlock-box">
+                <h1>🔐 Account Vault</h1>
+                <p id="unlockText">Create a master password. Your vault is encrypted before being stored in this browser.</p>
+                <input id="master" type="password" placeholder="Master password" autocomplete="off">
+                <button class="primary" style="width:100%;margin-top:9px" onclick="unlock()">→ unlock()</button>
+                <div class="note">This prototype stores the encrypted vault locally. If you forget the master password, there is no recovery key.</div>
+            </div>
+        </div>
+        
+        <main id="app" class="hidden">
+            <div class="wrap">
+                <div class="top">
+                    <div class="brand"><h1>🔐 Account Vault</h1><p>personal account reference vault</p></div>
+                    <div class="actions">
+                        <button onclick="openAccount()">+ addAccount()</button>
+                        <button onclick="exportVault()">↑ export()</button>
+                        <button onclick="document.getElementById('import').click()">↓ import()</button>
+                        <button onclick="lockVault()">lock()</button>
+                        <input id="import" type="file" accept=".json" hidden onchange="importVault(event)">
+                    </div>
+                </div>
+                
+                <section class="stats">
+                    <div class="stat"><small>accounts</small><b id="statAccounts">0</b></div>
+                    <div class="stat"><small>favorites</small><b id="statFav">0</b></div>
+                    <div class="stat"><small>categories</small><b id="statCats">0</b></div>
+                    <div class="stat"><small>2FA enabled</small><b id="stat2fa">0</b></div>
+                </section>
+                
+                <div class="card toolbar">
+                    <input id="search" placeholder="🔎 search accounts..." oninput="render()">
+                    <select id="filter" onchange="render()" style="max-width:180px">
+                        <option value="">All categories</option>
+                    </select>
+                </div>
+                
+                <div id="grid" class="grid"></div>
+            </div>
+        </main>
+        
+        <div id="modal" class="overlay hidden">
+            <div class="modal">
+                <h2 id="modalTitle">addAccount()</h2>
+                <p>Store only the credential information you actually need.</p>
+                <div class="form">
+                    <div class="row">
+                        <input id="fName" placeholder="Account / service name">
+                        <select id="fCat">
+                            <option>Gaming</option>
+                            <option>Social</option>
+                            <option>Work</option>
+                            <option>Finance</option>
+                            <option>Shopping</option>
+                            <option>Streaming</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <input id="fUser" placeholder="Username">
+                    <input id="fEmail" type="email" placeholder="Email">
+                    <input id="fPass" type="password" placeholder="Password">
+                    <input id="fUrl" placeholder="Website (optional)">
+                    <textarea id="fNotes" rows="3" placeholder="Notes (optional)"></textarea>
+                    <label><input id="f2fa" type="checkbox" style="width:auto"> 2FA enabled</label>
+                    <label><input id="fFav" type="checkbox" style="width:auto"> Favorite</label>
+                </div>
+                <div class="modal-actions">
+                    <button onclick="closeModal()">cancel</button>
+                    <button class="primary" onclick="saveAccount()">→ saveAccount()</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="toast" class="toast hidden"></div>
+        
+        <script>
+        let vault=[], masterKey=null, editingId=null;
+        const STORE='ACCOUNT_VAULT_V1';
+        
+        function toast(msg){
+            const t=document.getElementById('toast'); t.textContent=msg;t.classList.remove('hidden');
+            clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.add('hidden'),1800);
+        }
+        
+        function b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))
+
+        }
+        function unb64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))
+        }
+        async function derive(password,salt){
+            const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
+            return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+        }
+        
+        async function encrypt(data){
+            const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+            const key=await derive(masterKey,salt);
+            const enc=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(data)));
+            return JSON.stringify({salt:b64(salt),iv:b64(iv),data:b64(enc)});
+        }
+        
+        async function decrypt(raw,password){
+            const x=JSON.parse(raw),key=await derive(password,unb64(x.salt));
+            const dec=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(x.iv)},key,unb64(x.data));
+            return JSON.parse(new TextDecoder().decode(dec));
+        }
+        
+        async function persist(){
+            localStorage.setItem(STORE,await encrypt(vault));
+        }
+        
+        async function unlock(){
+            const p=document.getElementById('master').value;
+            if(!p)return toast('Enter a master password.');
+            const saved=localStorage.getItem(STORE);
+            try{
+                if(saved) vault=await decrypt(saved,p);
+                else {vault=[];masterKey=p;await persist()}
+                masterKey=p;
+                document.getElementById('unlock').classList.add('hidden');
+                document.getElementById('app').classList.remove('hidden');
+                render();toast('Vault unlocked');
+            }catch(e){toast('Wrong master password or damaged vault.')}
+        }
+        
+        function lockVault(){
+            masterKey=null;vault=[];document.getElementById('app').classList.add('hidden');
+            document.getElementById('unlock').classList.remove('hidden');document.getElementById('master').value='';
+        }
+        
+        function esc(v){
+            return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+        }
+        
+        function render(){
+            const q=document.getElementById('search').value.toLowerCase(),cat=document.getElementById('filter').value;
+            const cats=[...new Set(vault.map(x=>x.cat))].sort();
+            document.getElementById('filter').innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option ${c===cat?'selected':''}>${esc(c)}</option>`).join('');
+            document.getElementById('statAccounts').textContent=vault.length;
+            document.getElementById('statFav').textContent=vault.filter(x=>x.fav).length;
+            document.getElementById('statCats').textContent=cats.length;
+            document.getElementById('stat2fa').textContent=vault.filter(x=>x.twofa).length;
+            const list=vault.filter(x=>(!cat||x.cat===cat)&&(!q||[x.name,x.user,x.email,x.cat].join(' ').toLowerCase().includes(q)));
+            document.getElementById('grid').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No accounts found.<br><br>Click <b>+ addAccount()</b> to create one.</div>';
+        }
+        
+        function card(x){
+            return `<article class="card account">
+                <div class="account-head"><div class="icon">${x.fav?'⭐':'🔐'}</div><div><h3>${esc(x.name)}</h3><div class="cat">${esc(x.cat)} ${x.twofa?'· 🔒 2FA':''}</div></div></div>
+                <div class="email">${esc(x.email||x.user||'No username/email')}</div>
+                <div class="passrow"><input id="p_${x.id}" type="password" value="${esc(x.pass)}" readonly><button onclick="togglePass('${x.id}')">👁</button><button onclick="copyValue('${x.id}','pass')">📋</button></div>
+                <div class="card-actions"><button onclick="copyValue('${x.id}','email')">copy email</button><button onclick="openAccount('${x.id}')">edit</button><button class="danger" onclick="deleteAccount('${x.id}')">delete</button></div>
+                </article>`;
+            }
+            
+            function togglePass(id){const e=document.getElementById('p_'+id);e.type=e.type==='password'?'text':'password'}
+            async function copyValue(id,field){
+                const x=vault.find(a=>a.id===id);if(!x)return;
+                await navigator.clipboard.writeText(field==='pass'?x.pass:(x.email||x.user||''));
+                toast('Copied to clipboard');
+            }
+            
+            function openAccount(id=null){
+                editingId=id;
+                const x=id?vault.find(a=>a.id===id):{name:'',cat:'Gaming',user:'',email:'',pass:'',url:'',notes:'',twofa:false,fav:false};
+                document.getElementById('modalTitle').textContent=id?'editAccount()':'addAccount()';
+                fName.value=x.name;fCat.value=x.cat;fUser.value=x.user;fEmail.value=x.email;fPass.value=x.pass;fUrl.value=x.url;fNotes.value=x.notes;f2fa.checked=!!x.twofa;fFav.checked=!!x.fav;
+                document.getElementById('modal').classList.remove('hidden');
+            }
+            
+            function closeModal(){document.getElementById('modal').classList.add('hidden');editingId=null}
+            async function saveAccount(){
+                const name=fName.value.trim();if(!name)return toast('Account name is required.');
+                const obj={id:editingId||crypto.randomUUID(),name,cat:fCat.value,user:fUser.value.trim(),email:fEmail.value.trim(),pass:fPass.value,url:fUrl.value.trim(),notes:fNotes.value.trim(),twofa:f2fa.checked,fav:fFav.checked};
+                if(editingId){const i=vault.findIndex(x=>x.id===editingId);vault[i]=obj}else vault.push(obj);
+                await persist();closeModal();render();toast('Account saved');
+            }
+            
+            async function deleteAccount(id){
+                if(!confirm('Delete this account?'))return;
+                vault=vault.filter(x=>x.id!==id);await persist();render();toast('Account deleted');
+            }
+            
+            async function exportVault(){
+                const data=localStorage.getItem(STORE);if(!data)return toast('Nothing to export.');
+                const blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');
+                a.href=URL.createObjectURL(blob);a.download='account-vault-backup.json';a.click();URL.revokeObjectURL(a.href);toast('Encrypted backup exported');
+            }
+            
+            async function importVault(ev){
+                const file=ev.target.files[0];if(!file)return;
+                try{
+                    const raw=await file.text(),p=prompt('Enter the master password used for this backup:');
+                    if(!p)return;
+                    vault=await decrypt(raw,p);masterKey=p;await persist();render();toast('Backup imported');
+                }catch(e){toast('Import failed: wrong password or invalid backup.')}
+                ev.target.value='';
+            }
+            </script>
+            </body>
+            </html>
